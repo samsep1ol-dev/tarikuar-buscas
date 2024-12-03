@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ptbr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎲 TARIKUAR BUSCAS! | CONSULTAR TELEFONES! </title>
+    <link rel="stylesheet" href="sources/css/style.css">
+</head>
+
+<body>
+    <h1 style="text-align: center; position: relative; margin: 200px 0px -200px;">🎲 CONSULTA DE TELEFONE</h1>
+
+    <div class="main">
+        <div class="search-form">
+            <br>
+            <span class="operadora">📂 VIVO DATABASE / 🪪 ONLINE! </span>
+            <form id="consulta-form">
+                <input type="text" id="telefone" placeholder="EX: 📞 11993456876" required />
+                <button type="submit">CONSULTAR</button>
+            </form>
+
+            <div id="resultado">
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('consulta-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let telefone = document.getElementById('telefone').value;
+
+            // WEBHOOK
+            fetch('https://webhook.make.com/seu-webhook-id', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ telefone: telefone })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // RECEBER DADOS!
+                document.getElementById('resultado').innerHTML = `Resultado: ${JSON.stringify(data)}`;
+            })
+            .catch(error => {
+                console.error('Erro ao consultar:', error);
+            });
+        });
+    </script>
+</body>
+
+</html>
