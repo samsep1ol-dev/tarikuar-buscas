@@ -25,27 +25,39 @@
         </div>
     </div>
     <script>
-        document.getElementById('consulta-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            let telefone = document.getElementById('telefone').value;
+    document.getElementById('consulta-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    let telefone = document.getElementById('telefone').value.trim();
 
-            // WEBHOOK
-            fetch('https://hook.us2.make.com/6xjder11jgdmwgjz1zq4tqto48r0nd0c', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ telefone: telefone })
-            })
-            .then(response => response.json())
-            .then(data => {
-                // RECEBER DADOS!
+    // Verificar se o telefone foi preenchido corretamente
+    if (!telefone || isNaN(telefone)) {
+        alert('Por favor, insira um telefone válido.');
+        return;
+    }
+
+    // Enviar o telefone para o webhook Make
+    fetch('https://hook.us2.make.com/6xjder11jgdmwgjz1zq4tqto48r0nd0c', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ telefone: telefone })
+    })
+        .then(response => response.json())
+        .then(data => {
+            // Exibir o resultado no frontend
+            if (data.message) {
+                document.getElementById('resultado').innerHTML = `Mensagem: ${data.message}`;
+            } else {
                 document.getElementById('resultado').innerHTML = `Resultado: ${JSON.stringify(data)}`;
-            })
-            .catch(error => {
-                console.error('Erro ao consultar:', error);
-            });
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao consultar:', error);
+            alert('Ocorreu um erro ao processar a consulta.');
         });
+});
+
     </script>
 </body>
 
